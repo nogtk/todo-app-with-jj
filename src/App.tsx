@@ -24,6 +24,12 @@ export default function App() {
 		setTodos((prev) => prev.filter((t) => t.id !== id));
 	};
 
+	const editTodo = (id: number, newText: string) => {
+		setTodos((prev) =>
+			prev.map((t) => (t.id === id ? { ...t, text: newText } : t)),
+		);
+	};
+
 	return (
 		<div className="min-h-screen bg-gray-50 flex items-start justify-center pt-20 px-4">
 			<div className="w-full max-w-md">
@@ -31,7 +37,12 @@ export default function App() {
 					TODO
 				</h1>
 				<TodoInput value={input} onChange={setInput} onAdd={addTodo} />
-				<TodoList todos={todos} onToggle={toggleTodo} onDelete={deleteTodo} />
+				<TodoList
+					todos={todos}
+					onToggle={toggleTodo}
+					onDelete={deleteTodo}
+					onEdit={editTodo}
+				/>
 			</div>
 		</div>
 	);

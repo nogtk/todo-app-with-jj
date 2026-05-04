@@ -1,12 +1,60 @@
+import { useState } from "react";
 import type { Todo } from "../types";
 
 type Props = {
 	todo: Todo;
 	onToggle: (id: number) => void;
 	onDelete: (id: number) => void;
+	onEdit: (id: number, newText: string) => void;
 };
 
-export function TodoItem({ todo, onToggle, onDelete }: Props) {
+export function TodoItem({ todo, onToggle, onDelete, onEdit }: Props) {
+	const [isEditing, setIsEditing] = useState(false);
+	const [editText, setEditText] = useState(todo.text);
+
+	const handleSave = () => {
+		const text = editText.trim();
+		if (text) onEdit(todo.id, text);
+		setIsEditing(false);
+	};
+
+	const handleCancel = () => {
+		setEditText(todo.text);
+		setIsEditing(false);
+	};
+
+	if (isEditing) {
+		return (
+			<li className="flex items-center gap-2 rounded-lg bg-white border border-blue-300 px-4 py-3 shadow-sm">
+				<input
+					type="text"
+					value={editText}
+					onChange={(e) => setEditText(e.target.value)}
+					onKeyDown={(e) => {
+						if (e.key === "Enter") handleSave();
+						if (e.key === "Escape") handleCancel();
+					}}
+					className="flex-1 text-sm text-gray-700 border-b border-gray-300 focus:outline-none focus:border-blue-500"
+					autoFocus
+				/>
+				<button
+					type="button"
+					onClick={handleSave}
+					className="text-xs text-blue-500 hover:text-blue-700 transition-colors"
+				>
+					保存
+				</button>
+				<button
+					type="button"
+					onClick={handleCancel}
+					className="text-xs text-gray-400 hover:text-gray-600 transition-colors"
+				>
+					キャンセル
+				</button>
+			</li>
+		);
+	}
+
 	return (
 		<li className="flex items-center gap-3 rounded-lg bg-white border border-gray-200 px-4 py-3 shadow-sm">
 			<input
@@ -20,6 +68,14 @@ export function TodoItem({ todo, onToggle, onDelete }: Props) {
 			>
 				{todo.text}
 			</span>
+			<button
+				type="button"
+				onClick={() => setIsEditing(true)}
+				className="text-gray-300 hover:text-blue-400 transition-colors text-sm leading-none"
+				aria-label="編集"
+			>
+				✎
+			</button>
 			<button
 				type="button"
 				onClick={() => onDelete(todo.id)}
