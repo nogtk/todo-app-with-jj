@@ -1,11 +1,24 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { Todo } from "./types";
 import { TodoInput } from "./ui/TodoInput";
 import { TodoList } from "./ui/TodoList";
 
+const STORAGE_KEY = "todos";
+
 export default function App() {
-	const [todos, setTodos] = useState<Todo[]>([]);
+	const [todos, setTodos] = useState<Todo[]>(() => {
+		try {
+			const saved = localStorage.getItem(STORAGE_KEY);
+			return saved ? (JSON.parse(saved) as Todo[]) : [];
+		} catch {
+			return [];
+		}
+	});
 	const [input, setInput] = useState("");
+
+	useEffect(() => {
+		localStorage.setItem(STORAGE_KEY, JSON.stringify(todos));
+	}, [todos]);
 
 	const addTodo = () => {
 		const text = input.trim();
