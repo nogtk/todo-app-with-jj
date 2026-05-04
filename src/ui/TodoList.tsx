@@ -6,9 +6,16 @@ type Props = {
 	onToggle: (id: number) => void;
 	onDelete: (id: number) => void;
 	onEdit: (id: number, newText: string) => void;
+	onTogglePriority: (id: number) => void;
 };
 
-export function TodoList({ todos, onToggle, onDelete, onEdit }: Props) {
+export function TodoList({
+	todos,
+	onToggle,
+	onDelete,
+	onEdit,
+	onTogglePriority,
+}: Props) {
 	if (todos.length === 0) {
 		return (
 			<p className="text-center text-gray-400 text-sm">タスクがありません</p>
@@ -25,6 +32,7 @@ export function TodoList({ todos, onToggle, onDelete, onEdit }: Props) {
 						onToggle={onToggle}
 						onDelete={onDelete}
 						onEdit={onEdit}
+						onTogglePriority={onTogglePriority}
 					/>
 				))}
 			</ul>

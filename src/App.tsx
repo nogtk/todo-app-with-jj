@@ -10,7 +10,10 @@ export default function App() {
 	const addTodo = () => {
 		const text = input.trim();
 		if (!text) return;
-		setTodos((prev) => [...prev, { id: Date.now(), text, done: false }]);
+		setTodos((prev) => [
+			...prev,
+			{ id: Date.now(), text, done: false, priority: false },
+		]);
 		setInput("");
 	};
 
@@ -30,6 +33,12 @@ export default function App() {
 		);
 	};
 
+	const togglePriority = (id: number) => {
+		setTodos((prev) =>
+			prev.map((t) => (t.id === id ? { ...t, priority: !t.priority } : t)),
+		);
+	};
+
 	return (
 		<div className="min-h-screen bg-gray-50 flex items-start justify-center pt-20 px-4">
 			<div className="w-full max-w-md">
@@ -42,6 +51,7 @@ export default function App() {
 					onToggle={toggleTodo}
 					onDelete={deleteTodo}
 					onEdit={editTodo}
+					onTogglePriority={togglePriority}
 				/>
 			</div>
 		</div>

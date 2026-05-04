@@ -6,9 +6,16 @@ type Props = {
 	onToggle: (id: number) => void;
 	onDelete: (id: number) => void;
 	onEdit: (id: number, newText: string) => void;
+	onTogglePriority: (id: number) => void;
 };
 
-export function TodoItem({ todo, onToggle, onDelete, onEdit }: Props) {
+export function TodoItem({
+	todo,
+	onToggle,
+	onDelete,
+	onEdit,
+	onTogglePriority,
+}: Props) {
 	const [isEditing, setIsEditing] = useState(false);
 	const [editText, setEditText] = useState(todo.text);
 
@@ -56,7 +63,9 @@ export function TodoItem({ todo, onToggle, onDelete, onEdit }: Props) {
 	}
 
 	return (
-		<li className="flex items-center gap-3 rounded-lg bg-white border border-gray-200 px-4 py-3 shadow-sm">
+		<li
+			className={`flex items-center gap-3 rounded-lg bg-white border px-4 py-3 shadow-sm ${todo.priority ? "border-orange-300" : "border-gray-200"}`}
+		>
 			<input
 				type="checkbox"
 				checked={todo.done}
@@ -68,6 +77,14 @@ export function TodoItem({ todo, onToggle, onDelete, onEdit }: Props) {
 			>
 				{todo.text}
 			</span>
+			<button
+				type="button"
+				onClick={() => onTogglePriority(todo.id)}
+				className={`text-sm leading-none transition-colors ${todo.priority ? "text-orange-400" : "text-gray-300 hover:text-orange-300"}`}
+				aria-label="優先度"
+			>
+				★
+			</button>
 			<button
 				type="button"
 				onClick={() => setIsEditing(true)}
